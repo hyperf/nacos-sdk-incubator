@@ -1,5 +1,5 @@
-# component-creater
+# Nacos SDK
 
 ```
-composer create-project hyperf/component-creater
+composer require hyperf/nacos-sdk-incubator
 ```
