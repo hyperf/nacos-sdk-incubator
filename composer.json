@@ -19,7 +19,16 @@
     },
     "require": {
         "php": ">=7.3",
-        "psr/container": " ^1.0|^2.0"
+        "hyperf/config": "^2.1",
+        "hyperf/contract": "~2.1.0",
+        "hyperf/di": "^2.1",
+        "hyperf/event": "^2.1",
+        "hyperf/framework": "^2.1",
+        "hyperf/guzzle": "~2.1.0",
+        "hyperf/load-balancer": "~2.1.0",
+        "hyperf/logger": "^2.1",
+        "hyperf/process": "^2.1",
+        "hyperf/utils": "~2.1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
@@ -28,6 +37,15 @@
         "phpunit/phpunit": ">=7.0",
         "swoole/ide-helper": "dev-master",
         "symfony/var-dumper": "^5.1"
+    },
+    "suggest": {
+        "ext-json": "*",
+        "ext-simplexml": "*",
+        "ext-yaml": "*",
+        "hyperf/event": "~2.1.0",
+        "hyperf/process": "~2.1.0",
+        "hyperf/framework": "~2.1.0",
+        "hyperf/logger": "~2.1.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
