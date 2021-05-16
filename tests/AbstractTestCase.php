@@ -19,6 +19,7 @@ use Hyperf\Contract\ContainerInterface;
 use Hyperf\Di\Container;
 use Hyperf\Guzzle\CoroutineHandler;
 use Hyperf\Guzzle\HandlerStackFactory;
+use Hyperf\NacosSdk\Application;
 use Hyperf\NacosSdk\Constants;
 use Hyperf\NacosSdk\HandlerStackFactory as NacosSdkHandlerStackFactory;
 use Hyperf\NacosSdk\Provider\NacosAuth;
@@ -49,6 +50,10 @@ abstract class AbstractTestCase extends TestCase
     {
         $container = Mockery::mock(Container::class);
         ApplicationContext::setContainer($container);
+
+        $container->shouldReceive('get')->with(Application::class)->andReturnUsing(function ($_) use ($container) {
+            return new Application($container);
+        });
 
         $container->shouldReceive('get')->with(ConfigInterface::class)->andReturn($this->getConfig());
 
@@ -119,9 +124,7 @@ abstract class AbstractTestCase extends TestCase
         $path = BASE_PATH . '/tests/json/';
         $maps = [
             '/nacos/v1/cs/configs' => file_get_contents($path . 'get_config.json'),
-            //            '/open-apis/chat/v4/list' => file_get_contents($path . 'chat_list.json'),
-            //            '/open-apis/bot/v3/info/' => file_get_contents($path . 'info.json'),
-            //            '/open-apis/message/v4/send/' => file_get_contents($path . 'send.json'),
+            '/nacos/v1/auth/users/login' => file_get_contents($path . 'login.json'),
         ];
 
         return $maps[$uri];
@@ -138,8 +141,8 @@ abstract class AbstractTestCase extends TestCase
                 'host' => '127.0.0.1',
                 'port' => 8848,
                 // The nacos account info
-                'username' => null,
-                'password' => null,
+                'username' => 'nacos',
+                'password' => 'nacos',
                 'config_merge_mode' => Constants::CONFIG_MERGE_OVERWRITE,
                 // The service info.
                 'service' => [
