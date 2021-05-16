@@ -15,7 +15,6 @@ use GuzzleHttp\RequestOptions;
 use Hyperf\NacosSdk\AbstractProvider;
 use Hyperf\NacosSdk\Exception\RequestException;
 use Hyperf\NacosSdk\Model\ServiceModel;
-use Hyperf\Utils\Codec\Json;
 use Hyperf\Utils\Str;
 
 class NacosService extends AbstractProvider
@@ -55,17 +54,14 @@ class NacosService extends AbstractProvider
             RequestOptions::QUERY => $serviceModel->toArray(),
         ]);
 
-        $statusCode = $response->getStatusCode();
-        $contents = (string) $response->getBody();
-        if ($statusCode !== 200) {
-            if (Str::contains($contents, 'is not found')) {
+        try {
+            return $this->handleResponse($response);
+        } catch (RequestException $exception) {
+            if (Str::contains($exception->getMessage(), 'is not found')) {
                 return null;
             }
-
-            throw new RequestException($contents, $statusCode);
+            throw $exception;
         }
-
-        return Json::decode($contents);
     }
 
     public function list(int $pageNo, int $pageSize = 10, ?string $groupName = null, ?string $namespaceId = null): array
