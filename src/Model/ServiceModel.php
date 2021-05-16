@@ -51,97 +51,61 @@ class ServiceModel extends AbstractModel
      */
     protected $requiredFields = ['serviceName'];
 
-    /**
-     * @return string
-     */
     public function getServiceName(): string
     {
         return $this->serviceName;
     }
 
-    /**
-     * @param string $serviceName
-     */
     public function setServiceName(string $serviceName): void
     {
         $this->serviceName = $serviceName;
     }
 
-    /**
-     * @return string
-     */
     public function getGroupName(): string
     {
         return $this->groupName;
     }
 
-    /**
-     * @param string $groupName
-     */
     public function setGroupName(string $groupName): void
     {
         $this->groupName = $groupName;
     }
 
-    /**
-     * @return string
-     */
     public function getNamespaceId(): string
     {
         return $this->namespaceId;
     }
 
-    /**
-     * @param string $namespaceId
-     */
     public function setNamespaceId(string $namespaceId): void
     {
         $this->namespaceId = $namespaceId;
     }
 
-    /**
-     * @return float
-     */
     public function getProtectThreshold(): float
     {
         return $this->protectThreshold;
     }
 
-    /**
-     * @param float $protectThreshold
-     */
     public function setProtectThreshold(float $protectThreshold): void
     {
         $this->protectThreshold = $protectThreshold;
     }
 
-    /**
-     * @return string
-     */
     public function getMetadata(): string
     {
         return $this->metadata;
     }
 
-    /**
-     * @param string $metadata
-     */
     public function setMetadata(string $metadata): void
     {
         $this->metadata = $metadata;
     }
 
-    /**
-     * @return string
-     */
     public function getSelector(): string
     {
         return $this->selector;
     }
 
-    /**
-     * @param string $selector
-     */
     public function setSelector(string $selector): void
     {
         $this->selector = $selector;
@@ -162,6 +126,4 @@ class ServiceModel extends AbstractModel
     {
         $this->requiredFields = $requiredFields;
     }
-
-
 }

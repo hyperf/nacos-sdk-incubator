@@ -62,21 +62,13 @@ abstract class AbstractModel implements Arrayable
         return $this->getParams();
     }
 
-    /**
-     * @return array
-     */
     public function getRequiredFields(): array
     {
         return $this->requiredFields;
     }
 
-    /**
-     * @param array $requiredFields
-     */
     public function setRequiredFields(array $requiredFields): void
     {
         $this->requiredFields = $requiredFields;
     }
-
-
 }

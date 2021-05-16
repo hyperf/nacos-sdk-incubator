@@ -18,7 +18,6 @@ use Hyperf\NacosSdk\AbstractProvider;
 use Hyperf\NacosSdk\Model\InstanceModel;
 use Hyperf\NacosSdk\Model\ServiceModel;
 use Hyperf\Utils\ApplicationContext;
-use Hyperf\Utils\Codec\Json;
 
 class NacosInstance extends AbstractProvider
 {

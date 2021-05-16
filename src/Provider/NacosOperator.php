@@ -13,7 +13,6 @@ namespace Hyperf\NacosSdk\Provider;
 
 use GuzzleHttp\RequestOptions;
 use Hyperf\NacosSdk\AbstractProvider;
-use Hyperf\Utils\Codec\Json;
 
 class NacosOperator extends AbstractProvider
 {

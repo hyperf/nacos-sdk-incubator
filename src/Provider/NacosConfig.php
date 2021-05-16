@@ -15,7 +15,6 @@ use GuzzleHttp\RequestOptions;
 use Hyperf\NacosSdk\AbstractProvider;
 use Hyperf\NacosSdk\Exception\RuntimeException;
 use Hyperf\NacosSdk\Model\ConfigModel;
-use Hyperf\Utils\Codec\Json;
 
 class NacosConfig extends AbstractProvider
 {

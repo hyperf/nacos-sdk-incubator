@@ -1,8 +1,15 @@
 <?php
 
-
+declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 namespace Hyperf\NacosSdk;
-
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
@@ -72,11 +79,16 @@ abstract class AbstractProvider implements ProviderInterface
                 RequestOptions::HEADERS => [
                     'charset' => 'UTF-8',
                 ],
-            ]
+            ],
         ]);
     }
 
-    protected function checkResponseIsOk(ResponseInterface $response):bool
+    public function getName(): string
+    {
+        return static::$name;
+    }
+
+    protected function checkResponseIsOk(ResponseInterface $response): bool
     {
         if ($response->getStatusCode() !== 200) {
             return false;
@@ -94,10 +106,4 @@ abstract class AbstractProvider implements ProviderInterface
         }
         return Json::decode($contents);
     }
-
-    public function getName(): string
-    {
-        return static::$name;
-    }
-
 }

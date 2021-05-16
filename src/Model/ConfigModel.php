@@ -62,81 +62,51 @@ class ConfigModel extends AbstractModel
         }
     }
 
-    /**
-     * @return string
-     */
     public function getTenant(): string
     {
         return $this->tenant;
     }
 
-    /**
-     * @param string $tenant
-     */
     public function setTenant(string $tenant): void
     {
         $this->tenant = $tenant;
     }
 
-    /**
-     * @return string
-     */
     public function getDataId(): string
     {
         return $this->dataId;
     }
 
-    /**
-     * @param string $dataId
-     */
     public function setDataId(string $dataId): void
     {
         $this->dataId = $dataId;
     }
 
-    /**
-     * @return string
-     */
     public function getGroup(): string
     {
         return $this->group;
     }
 
-    /**
-     * @param string $group
-     */
     public function setGroup(string $group): void
     {
         $this->group = $group;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     */
     public function setContent(string $content): void
     {
         $this->content = $content;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     */
     public function setType(string $type): void
     {
         $this->type = $type;
@@ -157,6 +127,4 @@ class ConfigModel extends AbstractModel
     {
         $this->requiredFields = $requiredFields;
     }
-
-
 }

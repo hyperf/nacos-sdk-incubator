@@ -16,17 +16,17 @@ use GuzzleHttp\Psr7\Response;
 use Hyperf\Config\Config;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;
+use Hyperf\Di\Container;
 use Hyperf\Guzzle\CoroutineHandler;
+use Hyperf\Guzzle\HandlerStackFactory;
 use Hyperf\NacosSdk\Constants;
 use Hyperf\NacosSdk\HandlerStackFactory as NacosSdkHandlerStackFactory;
-use Hyperf\Guzzle\HandlerStackFactory;
 use Hyperf\NacosSdk\Provider\NacosAuth;
 use Hyperf\NacosSdk\Provider\NacosConfig;
 use Hyperf\NacosSdk\Provider\NacosInstance;
 use Hyperf\NacosSdk\Provider\NacosOperator;
 use Hyperf\NacosSdk\Provider\NacosService;
 use Hyperf\Utils\ApplicationContext;
-use Hyperf\Di\Container;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
@@ -44,7 +44,6 @@ abstract class AbstractTestCase extends TestCase
     {
         Mockery::close();
     }
-
 
     protected function getContainer(): ContainerInterface
     {
@@ -91,7 +90,7 @@ abstract class AbstractTestCase extends TestCase
             return new NacosSdkHandlerStackFactory($container);
         });
 
-        $container->shouldReceive('get')->with(HandlerStackFactory::class)->andReturnUsing(function ($_) use ($container) {
+        $container->shouldReceive('get')->with(HandlerStackFactory::class)->andReturnUsing(function ($_) {
             return new HandlerStackFactory();
         });
 
@@ -120,9 +119,9 @@ abstract class AbstractTestCase extends TestCase
         $path = BASE_PATH . '/tests/json/';
         $maps = [
             '/nacos/v1/cs/configs' => file_get_contents($path . 'get_config.json'),
-//            '/open-apis/chat/v4/list' => file_get_contents($path . 'chat_list.json'),
-//            '/open-apis/bot/v3/info/' => file_get_contents($path . 'info.json'),
-//            '/open-apis/message/v4/send/' => file_get_contents($path . 'send.json'),
+            //            '/open-apis/chat/v4/list' => file_get_contents($path . 'chat_list.json'),
+            //            '/open-apis/bot/v3/info/' => file_get_contents($path . 'info.json'),
+            //            '/open-apis/message/v4/send/' => file_get_contents($path . 'send.json'),
         ];
 
         return $maps[$uri];
