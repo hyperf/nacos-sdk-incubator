@@ -9,6 +9,11 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-! defined('BASE_PATH') && define('BASE_PATH', dirname(__DIR__));
+namespace Hyperf\NacosSdk;
 
-require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
+class Constants
+{
+    public const CONFIG_MERGE_OVERWRITE = 1;
+
+    public const CONFIG_MERGE_APPEND = 2;
+}
