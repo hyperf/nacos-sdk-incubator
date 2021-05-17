@@ -19,8 +19,6 @@ use Hyperf\Utils\Str;
 
 class ServiceProvider extends AbstractProvider
 {
-    protected static $name = 'nacos_service';
-
     public function create(ServiceModel $serviceModel): bool
     {
         $response = $this->request('POST', '/nacos/v1/ns/service', [

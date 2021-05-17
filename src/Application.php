@@ -45,7 +45,7 @@ class Application
      */
     protected $config;
 
-    public function __construct(ConfigProvider $config)
+    public function __construct(Config $config)
     {
         $this->config = $config;
     }

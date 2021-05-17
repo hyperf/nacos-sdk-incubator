@@ -18,8 +18,6 @@ use Hyperf\NacosSdk\Model\ConfigModel;
 
 class ConfigProvider extends AbstractProvider
 {
-    protected static $name = 'nacos_config';
-
     public function get(ConfigModel $configModel)
     {
         $response = $this->request('GET', '/nacos/v1/cs/configs', [

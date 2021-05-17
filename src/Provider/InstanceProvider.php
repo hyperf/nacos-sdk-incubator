@@ -21,8 +21,6 @@ use Hyperf\Utils\ApplicationContext;
 
 class InstanceProvider extends AbstractProvider
 {
-    protected static $name = 'nacos_instance';
-
     public function register(InstanceModel $instanceModel): bool
     {
         $response = $this->request('POST', '/nacos/v1/ns/instance', [

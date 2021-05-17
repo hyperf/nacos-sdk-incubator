@@ -17,8 +17,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class AuthProvider extends AbstractProvider
 {
-    protected static $name = 'nacos_auth';
-
     public function login(string $username, string $password): ResponseInterface
     {
         return $this->client()->request('POST', '/nacos/v1/auth/users/login', [

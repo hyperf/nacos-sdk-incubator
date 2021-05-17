@@ -16,8 +16,6 @@ use Hyperf\NacosSdk\AbstractProvider;
 
 class OperatorProvider extends AbstractProvider
 {
-    protected static $name = 'nacos_operator';
-
     public function getSwitches(): array
     {
         $response = $this->request('GET', '/nacos/v1/ns/operator/switches');
