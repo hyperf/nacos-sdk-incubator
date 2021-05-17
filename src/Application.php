@@ -14,20 +14,30 @@ namespace Hyperf\NacosSdk;
 use Hyperf\NacosSdk\Exception\InvalidArgumentException;
 use Hyperf\NacosSdk\Provider\AccessToken;
 use Hyperf\NacosSdk\Provider\Auth;
-use Hyperf\NacosSdk\Provider\NacosConfig;
-use Hyperf\NacosSdk\Provider\NacosInstance;
-use Hyperf\NacosSdk\Provider\NacosOperator;
-use Hyperf\NacosSdk\Provider\NacosService;
+use Hyperf\NacosSdk\Provider\Configs;
+use Hyperf\NacosSdk\Provider\Instance;
+use Hyperf\NacosSdk\Provider\Operator;
+use Hyperf\NacosSdk\Provider\Service;
 
-class Application implements NacosClientInterface
+/**
+ * @property AccessToken $accessToken
+ * @property Auth $auth
+ * @property Configs $configs
+ * @property Instance $instance
+ * @property Operator $operator
+ * @property Service $service
+ * @property Config $config
+ */
+class Application
 {
     protected $alias = [
         'accessToken' => AccessToken::class,
         'auth' => Auth::class,
-        'config' => NacosConfig::class,
-        'instance' => NacosInstance::class,
-        'operator' => NacosOperator::class,
-        'service' => NacosService::class,
+        'config' => Config::class,
+        'configs' => Configs::class,
+        'instance' => Instance::class,
+        'operator' => Operator::class,
+        'service' => Service::class,
     ];
 
     /**
@@ -43,6 +53,7 @@ class Application implements NacosClientInterface
     public function __construct(Config $config)
     {
         $this->config = $config;
+        $this->providers['config'] = $config;
     }
 
     public function __get($name)

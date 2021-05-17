@@ -23,10 +23,10 @@ use Hyperf\NacosSdk\Application;
 use Hyperf\NacosSdk\Constants;
 use Hyperf\NacosSdk\HandlerStackFactory as NacosSdkHandlerStackFactory;
 use Hyperf\NacosSdk\Provider\Auth;
-use Hyperf\NacosSdk\Provider\NacosConfig;
-use Hyperf\NacosSdk\Provider\NacosInstance;
-use Hyperf\NacosSdk\Provider\NacosOperator;
-use Hyperf\NacosSdk\Provider\NacosService;
+use Hyperf\NacosSdk\Provider\Configs;
+use Hyperf\NacosSdk\Provider\Instance;
+use Hyperf\NacosSdk\Provider\Operator;
+use Hyperf\NacosSdk\Provider\Service;
 use Hyperf\Utils\ApplicationContext;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -64,31 +64,31 @@ abstract class AbstractTestCase extends TestCase
             return new Auth($container);
         });
 
-        $container->shouldReceive('get')->with(NacosConfig::class)->andReturnUsing(function ($_) use ($container) {
-            return new NacosConfig($container);
+        $container->shouldReceive('get')->with(Configs::class)->andReturnUsing(function ($_) use ($container) {
+            return new Configs($container);
         });
-        $container->shouldReceive('make')->with(NacosConfig::class)->andReturnUsing(function ($_, $args) use ($container) {
-            return new NacosConfig($container);
-        });
-
-        $container->shouldReceive('get')->with(NacosInstance::class)->andReturnUsing(function ($_) use ($container) {
-            return new NacosInstance($container);
-        });
-        $container->shouldReceive('make')->with(NacosInstance::class)->andReturnUsing(function ($_, $args) use ($container) {
-            return new NacosInstance($container);
+        $container->shouldReceive('make')->with(Configs::class)->andReturnUsing(function ($_, $args) use ($container) {
+            return new Configs($container);
         });
 
-        $container->shouldReceive('get')->with(NacosOperator::class)->andReturnUsing(function ($_) use ($container) {
-            return new NacosOperator($container);
+        $container->shouldReceive('get')->with(Instance::class)->andReturnUsing(function ($_) use ($container) {
+            return new Instance($container);
         });
-        $container->shouldReceive('make')->with(NacosOperator::class)->andReturnUsing(function ($_, $args) use ($container) {
-            return new NacosOperator($container);
+        $container->shouldReceive('make')->with(Instance::class)->andReturnUsing(function ($_, $args) use ($container) {
+            return new Instance($container);
         });
-        $container->shouldReceive('get')->with(NacosService::class)->andReturnUsing(function ($_) use ($container) {
-            return new NacosService($container);
+
+        $container->shouldReceive('get')->with(Operator::class)->andReturnUsing(function ($_) use ($container) {
+            return new Operator($container);
         });
-        $container->shouldReceive('make')->with(NacosService::class)->andReturnUsing(function ($_, $args) use ($container) {
-            return new NacosService($container);
+        $container->shouldReceive('make')->with(Operator::class)->andReturnUsing(function ($_, $args) use ($container) {
+            return new Operator($container);
+        });
+        $container->shouldReceive('get')->with(Service::class)->andReturnUsing(function ($_) use ($container) {
+            return new Service($container);
+        });
+        $container->shouldReceive('make')->with(Service::class)->andReturnUsing(function ($_, $args) use ($container) {
+            return new Service($container);
         });
 
         $container->shouldReceive('get')->with(NacosSdkHandlerStackFactory::class)->andReturnUsing(function ($_) use ($container) {

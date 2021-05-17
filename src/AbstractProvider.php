@@ -41,11 +41,11 @@ abstract class AbstractProvider implements ProviderInterface
     protected $factory;
 
     /**
-     * @var NacosClientInterface
+     * @var Application
      */
     protected $app;
 
-    public function __construct(NacosClientInterface $app, Config $config)
+    public function __construct(Application $app, Config $config)
     {
         $this->app = $app;
         $this->config = $config;
