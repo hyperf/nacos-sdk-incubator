@@ -17,7 +17,7 @@ use Hyperf\NacosSdk\Exception\RequestException;
 use Hyperf\NacosSdk\Model\ServiceModel;
 use Hyperf\Utils\Str;
 
-class Service extends AbstractProvider
+class ServiceProvider extends AbstractProvider
 {
     protected static $name = 'nacos_service';
 

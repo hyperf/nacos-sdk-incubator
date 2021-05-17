@@ -16,7 +16,7 @@ use Hyperf\NacosSdk\AbstractProvider;
 use Hyperf\NacosSdk\Exception\RuntimeException;
 use Hyperf\NacosSdk\Model\ConfigModel;
 
-class Configs extends AbstractProvider
+class ConfigProvider extends AbstractProvider
 {
     protected static $name = 'nacos_config';
 

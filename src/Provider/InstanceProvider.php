@@ -19,7 +19,7 @@ use Hyperf\NacosSdk\Model\InstanceModel;
 use Hyperf\NacosSdk\Model\ServiceModel;
 use Hyperf\Utils\ApplicationContext;
 
-class Instance extends AbstractProvider
+class InstanceProvider extends AbstractProvider
 {
     protected static $name = 'nacos_instance';
 

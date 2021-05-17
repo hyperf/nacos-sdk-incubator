@@ -12,22 +12,9 @@ declare(strict_types=1);
 namespace HyperfTest\NacosSdk;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response;
 use Hyperf\Config\Config;
 use Hyperf\Contract\ConfigInterface;
-use Hyperf\Contract\ContainerInterface;
-use Hyperf\Di\Container;
-use Hyperf\Guzzle\CoroutineHandler;
-use Hyperf\Guzzle\HandlerStackFactory;
-use Hyperf\NacosSdk\Application;
 use Hyperf\NacosSdk\Constants;
-use Hyperf\NacosSdk\HandlerStackFactory as NacosSdkHandlerStackFactory;
-use Hyperf\NacosSdk\Provider\Auth;
-use Hyperf\NacosSdk\Provider\Configs;
-use Hyperf\NacosSdk\Provider\Instance;
-use Hyperf\NacosSdk\Provider\Operator;
-use Hyperf\NacosSdk\Provider\Service;
-use Hyperf\Utils\ApplicationContext;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
@@ -44,79 +31,6 @@ abstract class AbstractTestCase extends TestCase
     protected function tearDown(): void
     {
         Mockery::close();
-    }
-
-    protected function getContainer(): ContainerInterface
-    {
-        $container = Mockery::mock(Container::class);
-        ApplicationContext::setContainer($container);
-
-        $container->shouldReceive('get')->with(Application::class)->andReturnUsing(function ($_) use ($container) {
-            return new Application($container);
-        });
-
-        $container->shouldReceive('get')->with(ConfigInterface::class)->andReturn($this->getConfig());
-
-        $container->shouldReceive('get')->with(Auth::class)->andReturnUsing(function ($_) use ($container) {
-            return new Auth($container);
-        });
-        $container->shouldReceive('make')->with(Auth::class)->andReturnUsing(function ($_, $args) use ($container) {
-            return new Auth($container);
-        });
-
-        $container->shouldReceive('get')->with(Configs::class)->andReturnUsing(function ($_) use ($container) {
-            return new Configs($container);
-        });
-        $container->shouldReceive('make')->with(Configs::class)->andReturnUsing(function ($_, $args) use ($container) {
-            return new Configs($container);
-        });
-
-        $container->shouldReceive('get')->with(Instance::class)->andReturnUsing(function ($_) use ($container) {
-            return new Instance($container);
-        });
-        $container->shouldReceive('make')->with(Instance::class)->andReturnUsing(function ($_, $args) use ($container) {
-            return new Instance($container);
-        });
-
-        $container->shouldReceive('get')->with(Operator::class)->andReturnUsing(function ($_) use ($container) {
-            return new Operator($container);
-        });
-        $container->shouldReceive('make')->with(Operator::class)->andReturnUsing(function ($_, $args) use ($container) {
-            return new Operator($container);
-        });
-        $container->shouldReceive('get')->with(Service::class)->andReturnUsing(function ($_) use ($container) {
-            return new Service($container);
-        });
-        $container->shouldReceive('make')->with(Service::class)->andReturnUsing(function ($_, $args) use ($container) {
-            return new Service($container);
-        });
-
-        $container->shouldReceive('get')->with(NacosSdkHandlerStackFactory::class)->andReturnUsing(function ($_) use ($container) {
-            return new NacosSdkHandlerStackFactory($container);
-        });
-
-        $container->shouldReceive('get')->with(HandlerStackFactory::class)->andReturnUsing(function ($_) {
-            return new HandlerStackFactory();
-        });
-
-        $container->shouldReceive('make')->with(Client::class, Mockery::any())->andReturnUsing(function ($_, $args) {
-            if ($this->isMock) {
-                $client = Mockery::mock(Client::class);
-                $client->shouldReceive('request')->andReturnUsing(function ($_, $uri, $args) {
-                    return new Response(200, [], $this->getContent($uri));
-                });
-//                $client->shouldReceive('post')->andReturnUsing(function ($uri, $args) {
-//                    return new Response(200, [], $this->getContent($uri));
-//                });
-//                $client->shouldReceive('get')->andReturnUsing(function ($uri, $args) {
-//                    return new Response(200, [], $this->getContent($uri));
-//                });
-                return $client;
-            }
-            return new Client(...$args);
-        });
-        $container->shouldReceive('make')->with(CoroutineHandler::class)->withAnyArgs()->andReturn(new CoroutineHandler());
-        return $container;
     }
 
     protected function getContent(string $uri): string

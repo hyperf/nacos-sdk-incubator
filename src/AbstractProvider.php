@@ -13,32 +13,19 @@ namespace Hyperf\NacosSdk;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
-use Hyperf\Contract\ContainerInterface;
 use Hyperf\NacosSdk\Exception\RequestException;
 use Hyperf\NacosSdk\Provider\AccessToken;
 use Hyperf\Utils\Codec\Json;
 use Psr\Http\Message\ResponseInterface;
 
-abstract class AbstractProvider implements ProviderInterface
+abstract class AbstractProvider
 {
     use AccessToken;
-
-    protected static $name = '';
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
 
     /**
      * @var Config
      */
     protected $config;
-
-    /**
-     * @var HandlerStackFactory
-     */
-    protected $factory;
 
     /**
      * @var Application
@@ -60,20 +47,11 @@ abstract class AbstractProvider implements ProviderInterface
 
     public function client(): Client
     {
-        return $this->container->make(Client::class, [
-            [
-                'base_uri' => $this->config->getBaseUri(),
-                'handler' => $this->factory->get($this->getName()),
-                RequestOptions::HEADERS => [
-                    'charset' => 'UTF-8',
-                ],
-            ],
+        $config = array_merge($this->config->getGuzzleConfig(), [
+            'base_uri' => $this->config->getBaseUri(),
         ]);
-    }
 
-    public function getName(): string
-    {
-        return static::$name;
+        return new Client($config);
     }
 
     protected function checkResponseIsOk(ResponseInterface $response): bool

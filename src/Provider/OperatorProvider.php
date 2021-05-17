@@ -14,7 +14,7 @@ namespace Hyperf\NacosSdk\Provider;
 use GuzzleHttp\RequestOptions;
 use Hyperf\NacosSdk\AbstractProvider;
 
-class Operator extends AbstractProvider
+class OperatorProvider extends AbstractProvider
 {
     protected static $name = 'nacos_operator';
 

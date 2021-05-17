@@ -12,32 +12,27 @@ declare(strict_types=1);
 namespace Hyperf\NacosSdk;
 
 use Hyperf\NacosSdk\Exception\InvalidArgumentException;
-use Hyperf\NacosSdk\Provider\AccessToken;
-use Hyperf\NacosSdk\Provider\Auth;
-use Hyperf\NacosSdk\Provider\Configs;
-use Hyperf\NacosSdk\Provider\Instance;
-use Hyperf\NacosSdk\Provider\Operator;
-use Hyperf\NacosSdk\Provider\Service;
+use Hyperf\NacosSdk\Provider\AuthProvider;
+use Hyperf\NacosSdk\Provider\ConfigProvider;
+use Hyperf\NacosSdk\Provider\InstanceProvider;
+use Hyperf\NacosSdk\Provider\OperatorProvider;
+use Hyperf\NacosSdk\Provider\ServiceProvider;
 
 /**
- * @property AccessToken $accessToken
- * @property Auth $auth
- * @property Configs $configs
- * @property Instance $instance
- * @property Operator $operator
- * @property Service $service
- * @property Config $config
+ * @property AuthProvider $auth
+ * @property ConfigProvider $config
+ * @property InstanceProvider $instance
+ * @property OperatorProvider $operator
+ * @property ServiceProvider $service
  */
 class Application
 {
     protected $alias = [
-        'accessToken' => AccessToken::class,
-        'auth' => Auth::class,
-        'config' => Config::class,
-        'configs' => Configs::class,
-        'instance' => Instance::class,
-        'operator' => Operator::class,
-        'service' => Service::class,
+        'auth' => AuthProvider::class,
+        'config' => ConfigProvider::class,
+        'instance' => InstanceProvider::class,
+        'operator' => OperatorProvider::class,
+        'service' => ServiceProvider::class,
     ];
 
     /**
@@ -46,14 +41,13 @@ class Application
     protected $providers = [];
 
     /**
-     * @var Config
+     * @var ConfigProvider
      */
     protected $config;
 
-    public function __construct(Config $config)
+    public function __construct(ConfigProvider $config)
     {
         $this->config = $config;
-        $this->providers['config'] = $config;
     }
 
     public function __get($name)

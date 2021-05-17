@@ -31,7 +31,9 @@ class Config
     /**
      * @var array
      */
-    protected $guzzle = [];
+    protected $guzzleConfig = [
+        'headers' => 'UTF-8',
+    ];
 
     /**
      * @param $config = [
@@ -46,7 +48,7 @@ class Config
         isset($config['base_uri']) && $this->baseUri = (string) $config['base_uri'];
         isset($config['username']) && $this->username = (string) $config['username'];
         isset($config['password']) && $this->password = (string) $config['password'];
-        isset($config['guzzle']) && $this->guzzle = (array) $config['guzzle'];
+        isset($config['guzzle_config']) && $this->guzzleConfig = (array) $config['guzzle_config'];
     }
 
     public function getBaseUri(): string
@@ -62,5 +64,10 @@ class Config
     public function getPassword(): ?string
     {
         return $this->password;
+    }
+
+    public function getGuzzleConfig(): array
+    {
+        return $this->guzzleConfig;
     }
 }
