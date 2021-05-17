@@ -45,12 +45,10 @@ abstract class AbstractProvider implements ProviderInterface
      */
     protected $app;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(NacosClientInterface $app, Config $config)
     {
-        $this->container = $container;
-        $this->config = $container->get(Config::class);
-        $this->factory = $container->get(HandlerStackFactory::class);
-        $this->app = $container->get(NacosClientInterface::class);
+        $this->app = $app;
+        $this->config = $config;
     }
 
     public function request($method, $uri, array $options = [])

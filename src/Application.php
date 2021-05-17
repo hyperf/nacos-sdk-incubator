@@ -11,7 +11,6 @@ declare(strict_types=1);
  */
 namespace Hyperf\NacosSdk;
 
-use Hyperf\Contract\ContainerInterface;
 use Hyperf\NacosSdk\Exception\InvalidArgumentException;
 use Hyperf\NacosSdk\Provider\AccessToken;
 use Hyperf\NacosSdk\Provider\Auth;
@@ -22,11 +21,6 @@ use Hyperf\NacosSdk\Provider\NacosService;
 
 class Application implements NacosClientInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
     protected $alias = [
         'accessToken' => AccessToken::class,
         'auth' => Auth::class,
@@ -36,9 +30,19 @@ class Application implements NacosClientInterface
         'service' => NacosService::class,
     ];
 
-    public function __construct(ContainerInterface $container)
+    /**
+     * @var array
+     */
+    protected $providers = [];
+
+    /**
+     * @var Config
+     */
+    protected $config;
+
+    public function __construct(Config $config)
     {
-        $this->container = $container;
+        $this->config = $config;
     }
 
     public function __get($name)
@@ -47,8 +51,11 @@ class Application implements NacosClientInterface
             throw new InvalidArgumentException("{$name} is invalid.");
         }
 
-        return $this->container->get(
-            $this->alias[$name]
-        );
+        if (isset($this->providers[$name])) {
+            return $this->providers[$name];
+        }
+
+        $class = $this->alias[$name];
+        return $this->providers[$name] = new $class($this, $this->config);
     }
 }

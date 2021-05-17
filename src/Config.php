@@ -29,10 +29,16 @@ class Config
     protected $password;
 
     /**
+     * @var array
+     */
+    protected $guzzle = [];
+
+    /**
      * @param $config = [
      *     'base_uri' => 'http://127.0.0.1:8848',
      *     'username' => null,
      *     'password' => null,
+     *     'guzzle' => [],
      * ]
      */
     public function __construct(array $config = [])
@@ -40,6 +46,7 @@ class Config
         isset($config['base_uri']) && $this->baseUri = (string) $config['base_uri'];
         isset($config['username']) && $this->username = (string) $config['username'];
         isset($config['password']) && $this->password = (string) $config['password'];
+        isset($config['guzzle']) && $this->guzzle = (array) $config['guzzle'];
     }
 
     public function getBaseUri(): string
