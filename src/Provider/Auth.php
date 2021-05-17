@@ -15,7 +15,7 @@ use GuzzleHttp\RequestOptions;
 use Hyperf\NacosSdk\AbstractProvider;
 use Psr\Http\Message\ResponseInterface;
 
-class NacosAuth extends AbstractProvider
+class Auth extends AbstractProvider
 {
     protected static $name = 'nacos_auth';
 

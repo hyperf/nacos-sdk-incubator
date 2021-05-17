@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Hyperf\NacosSdk;
 
 use Hyperf\NacosSdk\Provider\AccessToken;
-use Hyperf\NacosSdk\Provider\NacosAuth;
+use Hyperf\NacosSdk\Provider\Auth;
 use Hyperf\NacosSdk\Provider\NacosConfig;
 use Hyperf\NacosSdk\Provider\NacosInstance;
 use Hyperf\NacosSdk\Provider\NacosOperator;
@@ -20,7 +20,7 @@ use Hyperf\NacosSdk\Provider\NacosService;
 
 /**
  * @property AccessToken $accessToken
- * @property NacosAuth $auth
+ * @property Auth $auth
  * @property NacosConfig $config
  * @property NacosInstance $instance
  * @property NacosOperator $operator

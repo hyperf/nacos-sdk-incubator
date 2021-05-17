@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace HyperfTest\NacosSdk\Cases;
 
 use Hyperf\NacosSdk\Application;
-use Hyperf\NacosSdk\Provider\NacosAuth;
+use Hyperf\NacosSdk\Provider\Auth;
 use Hyperf\NacosSdk\Provider\NacosConfig;
 use Hyperf\NacosSdk\Provider\NacosInstance;
 use Hyperf\NacosSdk\Provider\NacosOperator;
@@ -29,7 +29,7 @@ class ApplicationTest extends AbstractTestCase
     {
         $application = new Application($this->getContainer());
 
-        $this->assertInstanceOf(NacosAuth::class, $application->auth);
+        $this->assertInstanceOf(Auth::class, $application->auth);
         $this->assertInstanceOf(NacosConfig::class, $application->config);
         $this->assertInstanceOf(NacosInstance::class, $application->instance);
         $this->assertInstanceOf(NacosOperator::class, $application->operator);

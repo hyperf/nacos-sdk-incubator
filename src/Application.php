@@ -14,7 +14,7 @@ namespace Hyperf\NacosSdk;
 use Hyperf\Contract\ContainerInterface;
 use Hyperf\NacosSdk\Exception\InvalidArgumentException;
 use Hyperf\NacosSdk\Provider\AccessToken;
-use Hyperf\NacosSdk\Provider\NacosAuth;
+use Hyperf\NacosSdk\Provider\Auth;
 use Hyperf\NacosSdk\Provider\NacosConfig;
 use Hyperf\NacosSdk\Provider\NacosInstance;
 use Hyperf\NacosSdk\Provider\NacosOperator;
@@ -29,7 +29,7 @@ class Application implements NacosClientInterface
 
     protected $alias = [
         'accessToken' => AccessToken::class,
-        'auth' => NacosAuth::class,
+        'auth' => Auth::class,
         'config' => NacosConfig::class,
         'instance' => NacosInstance::class,
         'operator' => NacosOperator::class,

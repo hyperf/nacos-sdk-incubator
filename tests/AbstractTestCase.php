@@ -22,7 +22,7 @@ use Hyperf\Guzzle\HandlerStackFactory;
 use Hyperf\NacosSdk\Application;
 use Hyperf\NacosSdk\Constants;
 use Hyperf\NacosSdk\HandlerStackFactory as NacosSdkHandlerStackFactory;
-use Hyperf\NacosSdk\Provider\NacosAuth;
+use Hyperf\NacosSdk\Provider\Auth;
 use Hyperf\NacosSdk\Provider\NacosConfig;
 use Hyperf\NacosSdk\Provider\NacosInstance;
 use Hyperf\NacosSdk\Provider\NacosOperator;
@@ -57,11 +57,11 @@ abstract class AbstractTestCase extends TestCase
 
         $container->shouldReceive('get')->with(ConfigInterface::class)->andReturn($this->getConfig());
 
-        $container->shouldReceive('get')->with(NacosAuth::class)->andReturnUsing(function ($_) use ($container) {
-            return new NacosAuth($container);
+        $container->shouldReceive('get')->with(Auth::class)->andReturnUsing(function ($_) use ($container) {
+            return new Auth($container);
         });
-        $container->shouldReceive('make')->with(NacosAuth::class)->andReturnUsing(function ($_, $args) use ($container) {
-            return new NacosAuth($container);
+        $container->shouldReceive('make')->with(Auth::class)->andReturnUsing(function ($_, $args) use ($container) {
+            return new Auth($container);
         });
 
         $container->shouldReceive('get')->with(NacosConfig::class)->andReturnUsing(function ($_) use ($container) {
