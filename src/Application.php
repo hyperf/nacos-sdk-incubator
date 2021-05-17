@@ -20,15 +20,7 @@ use Hyperf\NacosSdk\Provider\NacosInstance;
 use Hyperf\NacosSdk\Provider\NacosOperator;
 use Hyperf\NacosSdk\Provider\NacosService;
 
-/**
- * @property AccessToken $accessToken
- * @property NacosAuth $auth
- * @property NacosConfig $config
- * @property NacosInstance $instance
- * @property NacosOperator $operator
- * @property NacosService $service
- */
-class Application
+class Application implements NacosClientInterface
 {
     /**
      * @var ContainerInterface
@@ -51,7 +43,7 @@ class Application
 
     public function __get($name)
     {
-        if (! isset($name)) {
+        if (! isset($name) || ! isset($this->alias[$name])) {
             throw new InvalidArgumentException("{$name} is invalid.");
         }
 

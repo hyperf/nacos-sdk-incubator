@@ -13,7 +13,6 @@ namespace Hyperf\NacosSdk;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
-use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;
 use Hyperf\NacosSdk\Exception\RequestException;
 use Hyperf\NacosSdk\Provider\AccessToken;
@@ -32,20 +31,26 @@ abstract class AbstractProvider implements ProviderInterface
     protected $container;
 
     /**
-     * @var ConfigInterface
+     * @var Config
      */
     protected $config;
 
     /**
-     * @var HandlerStackFactory|mixed
+     * @var HandlerStackFactory
      */
     protected $factory;
+
+    /**
+     * @var NacosClientInterface
+     */
+    protected $app;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->config = $container->get(ConfigInterface::class);
+        $this->config = $container->get(Config::class);
         $this->factory = $container->get(HandlerStackFactory::class);
+        $this->app = $container->get(NacosClientInterface::class);
     }
 
     public function request($method, $uri, array $options = [])
@@ -55,26 +60,11 @@ abstract class AbstractProvider implements ProviderInterface
         return $this->client()->request($method, $uri, $options);
     }
 
-    public function getServerUri(): string
-    {
-        $url = $this->config->get('nacos.url');
-
-        if ($url) {
-            return $url;
-        }
-
-        return sprintf(
-            '%s:%d',
-            $this->config->get('nacos.host', '127.0.0.1'),
-            (int) $this->config->get('nacos.port', 8848)
-        );
-    }
-
     public function client(): Client
     {
         return $this->container->make(Client::class, [
             [
-                'base_uri' => $this->getServerUri(),
+                'base_uri' => $this->config->getBaseUri(),
                 'handler' => $this->factory->get($this->getName()),
                 RequestOptions::HEADERS => [
                     'charset' => 'UTF-8',

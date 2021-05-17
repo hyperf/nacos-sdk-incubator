@@ -13,20 +13,19 @@ namespace Hyperf\NacosSdk\Provider;
 
 use GuzzleHttp\RequestOptions;
 use Hyperf\NacosSdk\AbstractProvider;
+use Psr\Http\Message\ResponseInterface;
 
 class NacosAuth extends AbstractProvider
 {
     protected static $name = 'nacos_auth';
 
-    public function login(string $username, string $password): array
+    public function login(string $username, string $password): ResponseInterface
     {
-        $response = $this->client()->request('POST', '/nacos/v1/auth/users/login', [
+        return $this->client()->request('POST', '/nacos/v1/auth/users/login', [
             RequestOptions::QUERY => [
                 'username' => $username,
                 'password' => $password,
             ],
         ]);
-
-        return $this->handleResponse($response);
     }
 }

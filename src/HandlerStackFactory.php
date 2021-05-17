@@ -13,7 +13,7 @@ namespace Hyperf\NacosSdk;
 
 use GuzzleHttp\HandlerStack;
 use Hyperf\Contract\ContainerInterface;
-use Hyperf\Guzzle\HandlerStackFactory as HyperfHandlerStackFactory;
+use Hyperf\Guzzle;
 
 class HandlerStackFactory
 {
@@ -32,6 +32,9 @@ class HandlerStackFactory
         $this->container = $container;
     }
 
+    /**
+     * @param callable|HandlerStack $handler
+     */
     public function set(string $name, $handler)
     {
         $this->stacks[$name] = $handler;
@@ -51,6 +54,6 @@ class HandlerStackFactory
 
     public function getDefaultHandlerStack(): HandlerStack
     {
-        return $this->container->get(HyperfHandlerStackFactory::class)->create();
+        return $this->container->get(Guzzle\HandlerStackFactory::class)->create();
     }
 }

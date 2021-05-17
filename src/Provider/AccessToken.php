@@ -11,8 +11,6 @@ declare(strict_types=1);
  */
 namespace Hyperf\NacosSdk\Provider;
 
-use Hyperf\NacosSdk\Application;
-
 trait AccessToken
 {
     /**
@@ -27,8 +25,8 @@ trait AccessToken
 
     public function getAccessToken(): ?string
     {
-        $username = $this->config->get('nacos.username');
-        $password = $this->config->get('nacos.password');
+        $username = $this->config->getUsername();
+        $password = $this->config->getPassword();
 
         if ($username === null || $password === null) {
             return null;
@@ -38,10 +36,9 @@ trait AccessToken
             return $this->accessToken;
         }
 
-        /** @var Application $application */
-        $application = $this->container->get(Application::class);
-
-        $result = $application->auth->login($username, $password);
+        $result = $this->handleResponse(
+            $this->app->auth->login($username, $password)
+        );
 
         $this->accessToken = $result['accessToken'];
         $this->expireTime = $result['tokenTtl'] + time();

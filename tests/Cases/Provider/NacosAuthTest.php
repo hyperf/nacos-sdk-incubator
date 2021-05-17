@@ -28,5 +28,4 @@ class NacosAuthTest extends AbstractTestCase
         $this->assertSame($result['tokenTtl'], 18000);
         $this->assertSame($result['globalAdmin'], true);
     }
-
 }
