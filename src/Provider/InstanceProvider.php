@@ -18,137 +18,128 @@ use Hyperf\NacosSdk\AbstractProvider;
 use Hyperf\NacosSdk\Model\InstanceModel;
 use Hyperf\NacosSdk\Model\ServiceModel;
 use Hyperf\Utils\ApplicationContext;
+use Psr\Http\Message\ResponseInterface;
 
 class InstanceProvider extends AbstractProvider
 {
-    public function register(InstanceModel $instanceModel): bool
+    public function register(string $serviceName, string $groupName, string $ip, int $port, ?string $clusterName = null, ?string $namespaceId = null, ?float $weight = null, ?array $metadata = null, ?bool $enabled = null, ?bool $ephemeral = null): ResponseInterface
     {
-        $response = $this->request('POST', '/nacos/v1/ns/instance', [
-            RequestOptions::QUERY => $instanceModel->toArray(),
+        return $this->request('POST', '/nacos/v1/ns/instance', [
+            RequestOptions::QUERY => $this->filter([
+                'serviceName' => $serviceName,
+                'groupName' => $groupName,
+                'ip' => $ip,
+                'port' => $port,
+                'clusterName' => $clusterName,
+                'namespaceId' => $namespaceId,
+                'weight' => $weight,
+                'metadata' => empty($metadata) ? null : json_encode($metadata, JSON_UNESCAPED_UNICODE),
+                'enabled' => $enabled,
+                'ephemeral' => $ephemeral,
+            ]),
         ]);
-
-        return $this->checkResponseIsOk($response);
     }
 
-    public function delete(InstanceModel $instanceModel): bool
+    public function delete(string $serviceName, string $groupName, string $ip, int $port, ?string $clusterName = null, ?string $namespaceId = null,  ?bool $ephemeral = null): ResponseInterface
     {
-        $response = $this->request('DELETE', '/nacos/v1/ns/instance', [
-            RequestOptions::QUERY => $instanceModel->toArray(),
+        return $this->request('DELETE', '/nacos/v1/ns/instance', [
+            RequestOptions::QUERY => $this->filter([
+                'serviceName' => $serviceName,
+                'groupName' => $groupName,
+                'ip' => $ip,
+                'port' => $port,
+                'clusterName' => $clusterName,
+                'namespaceId' => $namespaceId,
+                'ephemeral' => $ephemeral,
+            ]),
         ]);
 
-        return $this->checkResponseIsOk($response);
     }
 
-    public function update(InstanceModel $instanceModel): bool
+    public function update(string $serviceName, string $groupName, string $ip, int $port, ?string $clusterName = null, ?string $namespaceId = null, ?float $weight = null, ?array $metadata = null, ?bool $enabled = null, ?bool $ephemeral = null): ResponseInterface
     {
-        $instanceModel->setHealthy(null);
 
-        $response = $this->request('PUT', '/nacos/v1/ns/instance', [
-            RequestOptions::QUERY => $instanceModel->toArray(),
+        return $this->request('PUT', '/nacos/v1/ns/instance', [
+            RequestOptions::QUERY => $this->filter([
+                'serviceName' => $serviceName,
+                'groupName' => $groupName,
+                'ip' => $ip,
+                'port' => $port,
+                'clusterName' => $clusterName,
+                'namespaceId' => $namespaceId,
+                'weight' => $weight,
+                'metadata' => empty($metadata) ? null : json_encode($metadata, JSON_UNESCAPED_UNICODE),
+                'enabled' => $enabled,
+                'ephemeral' => $ephemeral,
+            ]),
         ]);
-
-        return $this->checkResponseIsOk($response);
     }
 
-    public function list(ServiceModel $serviceModel, array $clusters = [], ?bool $healthyOnly = null): array
+    public function list(string $serviceName, ?string $groupName = null, ?string $namespaceId = null, array $clusters = [], ?bool $healthyOnly = null): ResponseInterface
     {
-        $serviceName = $serviceModel->getServiceName();
-        $groupName = $serviceModel->getGroupName();
-        $namespaceId = $serviceModel->getNamespaceId();
-        $params = array_filter(compact('serviceName', 'groupName', 'namespaceId', 'clusters', 'healthyOnly'), function ($item) {
-            return $item !== null;
-        });
-        if (isset($params['clusters'])) {
-            $params['clusters'] = implode(',', $params['clusters']);
+        if (! empty($clusters)) {
+            $clusters = implode(',', $clusters);
         }
 
-        $response = $this->request('GET', '/nacos/v1/ns/instance/list', [
-            RequestOptions::QUERY => $params,
+        return $this->request('GET', '/nacos/v1/ns/instance/list', [
+            RequestOptions::QUERY => $this->filter([
+                'serviceName' => $serviceName,
+                'groupName' => $groupName,
+                'namespaceId' => $namespaceId,
+                'clusters' => $clusters,
+                'healthyOnly' => $healthyOnly,
+            ]),
         ]);
-
-        return $this->handleResponse($response);
     }
 
-    public function getOptimal(ServiceModel $serviceModel, array $clusters = [])
+    public function detail(string $ip, int $port, string $namespaceId,string $serviceName, ?float $weight = null, ?bool $enabled = null, ?bool $healthy,?string $metadata = null, ?string $clusterName = null, ?string $groupName = null, ?bool $ephemeral = null): ResponseInterface
     {
-        $list = $this->list($serviceModel, $clusters, true);
-        $instance = $list['hosts'] ?? [];
-        if (! $instance) {
-            return false;
-        }
-        $enabled = array_filter($instance, function ($item) {
-            return $item['enabled'] && $item['healthy'];
-        });
-
-        $tactics = strtolower($this->config->get('nacos.load_balancer', 'random'));
-
-        return $this->loadBalancer($enabled, $tactics);
-    }
-
-    public function detail(InstanceModel $instanceModel): array
-    {
-        $response = $this->request('GET', '/nacos/v1/ns/instance', [
-            RequestOptions::QUERY => $instanceModel->toArray(),
+        return $this->request('GET', '/nacos/v1/ns/instance', [
+            RequestOptions::QUERY => $this->filter([
+                'ip' => $ip,
+                'port' => $port,
+                'namespaceId' => $namespaceId,
+                'serviceName' => $serviceName,
+                'weight' => $weight,
+                'enabled' => $enabled,
+                'healthy' => $healthy,
+                'metadata' => $metadata,
+                'clusterName' => $clusterName,
+                'groupName' => $groupName,
+                'ephemeral' => $ephemeral,
+            ]),
         ]);
-
-        return $this->handleResponse($response);
     }
 
-    public function beat(ServiceModel $serviceModel, InstanceModel $instanceModel): array
+    public function beat(string $serviceName,string $groupName, bool $ephemeral, string $namespaceId): ResponseInterface
     {
-        $serviceName = $serviceModel->getServiceName();
-        $groupName = $serviceModel->getGroupName();
-        $ephemeral = $instanceModel->getEphemeral();
-        $namespaceId = $instanceModel->getNamespaceId();
-        $params = array_filter(compact('serviceName', 'groupName', 'ephemeral', 'namespaceId'), function ($item) {
-            return $item !== null;
-        });
-        $params['beat'] = $instanceModel->toJson();
-
-        $response = $this->request('PUT', '/nacos/v1/ns/instance/beat', [
-            RequestOptions::QUERY => $params,
+        return $this->request('PUT', '/nacos/v1/ns/instance/beat', [
+            RequestOptions::QUERY => $this->filter([
+                'serviceName' => $serviceName,
+                'groupName' => $groupName,
+                'ephemeral' => $ephemeral,
+                'beat' => json_encode([
+                    'serviceName' => $serviceName,
+                    'groupName' => $groupName,
+                    'ephemeral' => $ephemeral,
+                    'namespaceId' => $namespaceId
+                ], JSON_UNESCAPED_UNICODE),
+            ]),
         ]);
-
-        return $this->handleResponse($response);
     }
 
-    public function updateHealth(InstanceModel $instanceModel): bool
+    public function updateHealth(string $serviceName, string $groupName,string $clusterName, string $ip, int $port, bool $healthy, ?string $namespaceId = null): ResponseInterface
     {
-        if ($instanceModel->getHealthy() === null) {
-            $instanceModel->setHealthy(true);
-        }
-
-        $response = $this->request('PUT', '/nacos/v1/ns/health/instance', [
-            RequestOptions::QUERY => $instanceModel->toArray(),
+        return $this->request('PUT', '/nacos/v1/ns/health/instance', [
+            RequestOptions::QUERY => $this->filter([
+                'serviceName' => $serviceName,
+                'groupName' => $groupName,
+                'clusterName' => $clusterName,
+                'ip' => $ip,
+                'port' => $port,
+                'healthy' => $healthy,
+                'namespaceId' => $namespaceId,
+            ]),
         ]);
-
-        return $this->checkResponseIsOk($response);
-    }
-
-    protected function loadBalancer(array $nodes, $tactics = 'random')
-    {
-        $loadNodes = [];
-        $nacosNodes = [];
-        /** @var array|InstanceModel $node */
-        foreach ($nodes as $node) {
-            if (is_array($node)) {
-                $node = (object) $node;
-            }
-            $loadNodes[] = new Node($node->getIp(), $node->getPort(), (int) $node->getWeight());
-            $key = sprintf('%s:%d', $node->getIp(), $node->getPort());
-            $nacosNodes[$key] = $node;
-        }
-
-        $container = ApplicationContext::getContainer();
-        $loadBalancerManager = $container->get(LoadBalancerManager::class);
-        /** @var \Hyperf\LoadBalancer\LoadBalancerInterface $loadBalancer */
-        $loadBalancer = $container->get($loadBalancerManager->get($tactics));
-        $loadBalancer->setNodes($loadNodes);
-
-        /** @var Node $availableNode */
-        $availableNode = $loadBalancer->select();
-
-        $key = sprintf('%s:%d', $availableNode->host, $availableNode->port);
-        return $nacosNodes[$key];
     }
 }
