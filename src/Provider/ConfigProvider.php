@@ -13,39 +13,42 @@ namespace Hyperf\NacosSdk\Provider;
 
 use GuzzleHttp\RequestOptions;
 use Hyperf\NacosSdk\AbstractProvider;
-use Hyperf\NacosSdk\Exception\RuntimeException;
-use Hyperf\NacosSdk\Model\ConfigModel;
+use Psr\Http\Message\ResponseInterface;
 
 class ConfigProvider extends AbstractProvider
 {
-    public function get(ConfigModel $configModel)
+    public function get(string $dataId, string $group, ?string $tenant = null): ResponseInterface
     {
-        $response = $this->request('GET', '/nacos/v1/cs/configs', [
-            RequestOptions::QUERY => $configModel->toArray(),
+        return $this->request('GET', '/nacos/v1/cs/configs', [
+            RequestOptions::QUERY => $this->filter([
+                'dataId' => $dataId,
+                'group' => $group,
+                'tenant' => $tenant,
+            ]),
         ]);
-
-        try {
-            return $this->handleResponse($response);
-        } catch (RuntimeException $exception) {
-            return [];
-        }
     }
 
-    public function set(ConfigModel $configModel): array
+    public function set(string $dataId, string $group, string $content, ?string $type = null, ?string $tenant = null): ResponseInterface
     {
-        $response = $this->request('POST', '/nacos/v1/cs/configs', [
-            RequestOptions::FORM_PARAMS => $configModel->toArray(),
+        return $this->request('POST', '/nacos/v1/cs/configs', [
+            RequestOptions::FORM_PARAMS => $this->filter([
+                'dataId' => $dataId,
+                'group' => $group,
+                'tenant' => $tenant,
+                'type' => $type,
+                'content' => $content,
+            ]),
         ]);
-
-        return $this->handleResponse($response);
     }
 
-    public function delete(ConfigModel $configModel): array
+    public function delete(string $dataId, string $group, ?string $tenant = null): ResponseInterface
     {
-        $response = $this->request('DELETE', '/nacos/v1/cs/configs', [
-            RequestOptions::QUERY => $configModel->toArray(),
+        return $this->request('DELETE', '/nacos/v1/cs/configs', [
+            RequestOptions::QUERY => $this->filter([
+                'dataId' => $dataId,
+                'group' => $group,
+                'tenant' => $tenant,
+            ]),
         ]);
-
-        return $this->handleResponse($response);
     }
 }

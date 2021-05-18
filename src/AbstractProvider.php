@@ -72,4 +72,16 @@ abstract class AbstractProvider
         }
         return Json::decode($contents);
     }
+
+    protected function filter(array $input): array
+    {
+        $result = [];
+        foreach ($input as $key => $value) {
+            if ($value !== null) {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
+    }
 }
