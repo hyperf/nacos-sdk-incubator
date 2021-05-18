@@ -12,12 +12,7 @@ declare(strict_types=1);
 namespace Hyperf\NacosSdk\Provider;
 
 use GuzzleHttp\RequestOptions;
-use Hyperf\LoadBalancer\LoadBalancerManager;
-use Hyperf\LoadBalancer\Node;
 use Hyperf\NacosSdk\AbstractProvider;
-use Hyperf\NacosSdk\Model\InstanceModel;
-use Hyperf\NacosSdk\Model\ServiceModel;
-use Hyperf\Utils\ApplicationContext;
 use Psr\Http\Message\ResponseInterface;
 
 class InstanceProvider extends AbstractProvider
@@ -40,7 +35,7 @@ class InstanceProvider extends AbstractProvider
         ]);
     }
 
-    public function delete(string $serviceName, string $groupName, string $ip, int $port, ?string $clusterName = null, ?string $namespaceId = null,  ?bool $ephemeral = null): ResponseInterface
+    public function delete(string $serviceName, string $groupName, string $ip, int $port, ?string $clusterName = null, ?string $namespaceId = null, ?bool $ephemeral = null): ResponseInterface
     {
         return $this->request('DELETE', '/nacos/v1/ns/instance', [
             RequestOptions::QUERY => $this->filter([
@@ -53,12 +48,10 @@ class InstanceProvider extends AbstractProvider
                 'ephemeral' => $ephemeral,
             ]),
         ]);
-
     }
 
     public function update(string $serviceName, string $groupName, string $ip, int $port, ?string $clusterName = null, ?string $namespaceId = null, ?float $weight = null, ?array $metadata = null, ?bool $enabled = null, ?bool $ephemeral = null): ResponseInterface
     {
-
         return $this->request('PUT', '/nacos/v1/ns/instance', [
             RequestOptions::QUERY => $this->filter([
                 'serviceName' => $serviceName,
@@ -92,7 +85,7 @@ class InstanceProvider extends AbstractProvider
         ]);
     }
 
-    public function detail(string $ip, int $port, string $namespaceId,string $serviceName, ?float $weight = null, ?bool $enabled = null, ?bool $healthy,?string $metadata = null, ?string $clusterName = null, ?string $groupName = null, ?bool $ephemeral = null): ResponseInterface
+    public function detail(string $ip, int $port, string $namespaceId, string $serviceName, ?float $weight = null, ?bool $enabled = null, ?bool $healthy, ?string $metadata = null, ?string $clusterName = null, ?string $groupName = null, ?bool $ephemeral = null): ResponseInterface
     {
         return $this->request('GET', '/nacos/v1/ns/instance', [
             RequestOptions::QUERY => $this->filter([
@@ -111,7 +104,7 @@ class InstanceProvider extends AbstractProvider
         ]);
     }
 
-    public function beat(string $serviceName,string $groupName, bool $ephemeral, string $namespaceId): ResponseInterface
+    public function beat(string $serviceName, string $groupName, bool $ephemeral, string $namespaceId): ResponseInterface
     {
         return $this->request('PUT', '/nacos/v1/ns/instance/beat', [
             RequestOptions::QUERY => $this->filter([
@@ -122,13 +115,13 @@ class InstanceProvider extends AbstractProvider
                     'serviceName' => $serviceName,
                     'groupName' => $groupName,
                     'ephemeral' => $ephemeral,
-                    'namespaceId' => $namespaceId
+                    'namespaceId' => $namespaceId,
                 ], JSON_UNESCAPED_UNICODE),
             ]),
         ]);
     }
 
-    public function updateHealth(string $serviceName, string $groupName,string $clusterName, string $ip, int $port, bool $healthy, ?string $namespaceId = null): ResponseInterface
+    public function updateHealth(string $serviceName, string $groupName, string $clusterName, string $ip, int $port, bool $healthy, ?string $namespaceId = null): ResponseInterface
     {
         return $this->request('PUT', '/nacos/v1/ns/health/instance', [
             RequestOptions::QUERY => $this->filter([
