@@ -17,21 +17,25 @@ use Psr\Http\Message\ResponseInterface;
 
 class InstanceProvider extends AbstractProvider
 {
-    public function register(string $serviceName, string $groupName, string $ip, int $port, ?string $clusterName = null, ?string $namespaceId = null, ?float $weight = null, ?array $metadata = null, ?bool $enabled = null, ?bool $ephemeral = null): ResponseInterface
+    /**
+     * @param $optional = [
+     *     'groupName' => '',
+     *     'clusterName' => '',
+     *     'namespaceId' => '',
+     *     'weight' => 99.0,
+     *     'metadata' => '',
+     *     'enabled' => true,
+     *     'ephemeral' => false, // 是否临时实例
+     * ]
+     */
+    public function register(string $ip, int $port, string $serviceName, array $optional = []): ResponseInterface
     {
         return $this->request('POST', '/nacos/v1/ns/instance', [
-            RequestOptions::QUERY => $this->filter([
+            RequestOptions::QUERY => $this->filter(array_merge($optional, [
                 'serviceName' => $serviceName,
-                'groupName' => $groupName,
                 'ip' => $ip,
                 'port' => $port,
-                'clusterName' => $clusterName,
-                'namespaceId' => $namespaceId,
-                'weight' => $weight,
-                'metadata' => empty($metadata) ? null : json_encode($metadata, JSON_UNESCAPED_UNICODE),
-                'enabled' => $enabled,
-                'ephemeral' => $ephemeral,
-            ]),
+            ])),
         ]);
     }
 
