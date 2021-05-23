@@ -16,60 +16,78 @@ use Hyperf\NacosSdk\AbstractProvider;
 use Hyperf\NacosSdk\Exception\RequestException;
 use Hyperf\NacosSdk\Model\ServiceModel;
 use Hyperf\Utils\Str;
+use Psr\Http\Message\ResponseInterface;
 
 class ServiceProvider extends AbstractProvider
 {
-    public function create(ServiceModel $serviceModel): bool
+    /**
+     * @param array $optional = [
+     *      'groupName' => '',
+     *      'namespaceId' => '',
+     *      'protectThreshold' => 0.99,
+     *      'metadata' => '',
+     *      'selector' => '', // json字符串
+     * ]
+     */
+    public function create(string $serviceName, array $optional = []): ResponseInterface
     {
-        $response = $this->request('POST', '/nacos/v1/ns/service', [
-            RequestOptions::QUERY => $serviceModel->toArray(),
+        return $this->request('POST', '/nacos/v1/ns/service', [
+            RequestOptions::QUERY => $this->filter(array_merge($optional, [
+                'serviceName' => $serviceName,
+            ])),
         ]);
-
-        return $this->checkResponseIsOk($response);
     }
 
-    public function delete(ServiceModel $serviceModel): bool
+    public function delete(string $serviceName, ?string $groupName = null, ?string $namespaceId = null): ResponseInterface
     {
-        $response = $this->request('DELETE', '/nacos/v1/ns/service', [
-            RequestOptions::QUERY => $serviceModel->toArray(),
+        return $this->request('DELETE', '/nacos/v1/ns/service', [
+            RequestOptions::QUERY => $this->filter([
+                'serviceName' => $serviceName,
+                'groupName' => $groupName,
+                'namespaceId' => $namespaceId,
+            ]),
         ]);
-
-        return $this->checkResponseIsOk($response);
     }
 
-    public function update(ServiceModel $serviceModel): bool
+    /**
+     * @param array $optional = [
+     *      'groupName' => '',
+     *      'namespaceId' => '',
+     *      'protectThreshold' => 0.99,
+     *      'metadata' => '',
+     *      'selector' => '', // json字符串
+     * ]
+     */
+    public function update(string $serviceName, array $optional = []): ResponseInterface
     {
-        $response = $this->request('PUT', '/nacos/v1/ns/service', [
-            RequestOptions::QUERY => $serviceModel->toArray(),
+        return $this->request('PUT', '/nacos/v1/ns/service', [
+            RequestOptions::QUERY => $this->filter(array_merge($optional, [
+                'serviceName' => $serviceName,
+            ])),
         ]);
-
-        return $this->checkResponseIsOk($response);
     }
 
-    public function detail(ServiceModel $serviceModel): ?array
-    {
-        $response = $this->request('GET', '/nacos/v1/ns/service', [
-            RequestOptions::QUERY => $serviceModel->toArray(),
-        ]);
 
-        try {
-            return $this->handleResponse($response);
-        } catch (RequestException $exception) {
-            if (Str::contains($exception->getMessage(), 'is not found')) {
-                return null;
-            }
-            throw $exception;
-        }
+    public function detail(string $serviceName, ?string $groupName = null, ?string $namespaceId = null): ResponseInterface
+    {
+        return $this->request('GET', '/nacos/v1/ns/service', [
+            RequestOptions::QUERY => $this->filter([
+                'serviceName' => $serviceName,
+                'groupName' => $groupName,
+                'namespaceId' => $namespaceId,
+            ]),
+        ]);
     }
 
-    public function list(int $pageNo, int $pageSize = 10, ?string $groupName = null, ?string $namespaceId = null): array
+    public function list(int $pageNo, int $pageSize, ?string $groupName = null, ?string $namespaceId = null): ResponseInterface
     {
-        $params = array_filter(compact('pageNo', 'pageSize', 'groupName', 'namespaceId'));
-
-        $response = $this->request('GET', '/nacos/v1/ns/service/list', [
-            RequestOptions::QUERY => $params,
+        return $this->request('GET', '/nacos/v1/ns/service/list', [
+            RequestOptions::QUERY => $this->filter([
+                'pageNo' => $pageNo,
+                'pageSize' => $pageSize,
+                'groupName' => $groupName,
+                'namespaceId' => $namespaceId
+            ]),
         ]);
-
-        return $this->handleResponse($response);
     }
 }
