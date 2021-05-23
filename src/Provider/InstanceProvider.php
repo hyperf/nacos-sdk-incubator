@@ -39,88 +39,101 @@ class InstanceProvider extends AbstractProvider
         ]);
     }
 
-    public function delete(string $serviceName, string $groupName, string $ip, int $port, ?string $clusterName = null, ?string $namespaceId = null, ?bool $ephemeral = null): ResponseInterface
+    /**
+     * @param $optional = [
+     *     'clusterName' => '',
+     *     'namespaceId' => '',
+     *     'ephemeral' => '',
+     * ]
+     */
+    public function delete(string $serviceName, string $groupName, string $ip, int $port, array $optional = []): ResponseInterface
     {
         return $this->request('DELETE', '/nacos/v1/ns/instance', [
-            RequestOptions::QUERY => $this->filter([
-                'serviceName' => $serviceName,
-                'groupName' => $groupName,
-                'ip' => $ip,
-                'port' => $port,
-                'clusterName' => $clusterName,
-                'namespaceId' => $namespaceId,
-                'ephemeral' => $ephemeral,
-            ]),
+            RequestOptions::QUERY => $this->filter(array_merge($optional, [
+                    'serviceName' => $serviceName,
+                    'groupName' => $groupName,
+                    'ip' => $ip,
+                    'port' => $port,
+
+                ])),
         ]);
     }
 
-    public function update(string $serviceName, string $groupName, string $ip, int $port, ?string $clusterName = null, ?string $namespaceId = null, ?float $weight = null, ?array $metadata = null, ?bool $enabled = null, ?bool $ephemeral = null): ResponseInterface
+    /**
+     * @param $optional = [
+     *     'clusterName' => '',
+     *     'namespaceId' => '',
+     *     'weight' => '',
+     *     'metadata' => '',
+     *     'enabled' => '',
+     *     'ephemeral' => '',
+     * ]
+     */
+    public function update(string $serviceName, string $groupName, string $ip, int $port, array $optional = []): ResponseInterface
     {
         return $this->request('PUT', '/nacos/v1/ns/instance', [
-            RequestOptions::QUERY => $this->filter([
+            RequestOptions::QUERY => $this->filter(array_merge($optional, [
                 'serviceName' => $serviceName,
                 'groupName' => $groupName,
                 'ip' => $ip,
                 'port' => $port,
-                'clusterName' => $clusterName,
-                'namespaceId' => $namespaceId,
-                'weight' => $weight,
-                'metadata' => empty($metadata) ? null : json_encode($metadata, JSON_UNESCAPED_UNICODE),
-                'enabled' => $enabled,
-                'ephemeral' => $ephemeral,
-            ]),
+            ])),
         ]);
     }
 
-    public function list(string $serviceName, ?string $groupName = null, ?string $namespaceId = null, array $clusters = [], ?bool $healthyOnly = null): ResponseInterface
+    /**
+     * @param $optional = [
+     *     'groupName' => '',
+     *     'namespaceId' => '',
+     *     'clusters' => '',
+     *     'healthyOnly' => '',
+     * ]
+     */
+    public function list(string $serviceName, array $optional = []): ResponseInterface
     {
         if (! empty($clusters)) {
             $clusters = implode(',', $clusters);
         }
 
         return $this->request('GET', '/nacos/v1/ns/instance/list', [
-            RequestOptions::QUERY => $this->filter([
+            RequestOptions::QUERY => $this->filter(array_merge($optional, [
                 'serviceName' => $serviceName,
-                'groupName' => $groupName,
-                'namespaceId' => $namespaceId,
-                'clusters' => $clusters,
-                'healthyOnly' => $healthyOnly,
-            ]),
+            ])),
         ]);
     }
 
-    public function detail(string $ip, int $port, string $namespaceId, string $serviceName, ?float $weight = null, ?bool $enabled = null, ?bool $healthy, ?string $metadata = null, ?string $clusterName = null, ?string $groupName = null, ?bool $ephemeral = null): ResponseInterface
+    /**
+     * @param array $optional = [
+     *      'weight' => '',
+     *      'enabled' => '',
+     *      'healthy' => '',
+     *      'metadata' => '',
+     *      'clusterName' => '',
+     *      'groupName' => '',
+     *      'ephemeral' => '',
+     * ]
+     */
+    public function detail(string $ip, int $port, string $namespaceId, string $serviceName, array $optional = []): ResponseInterface
     {
         return $this->request('GET', '/nacos/v1/ns/instance', [
-            RequestOptions::QUERY => $this->filter([
+            RequestOptions::QUERY => $this->filter(array_merge($optional, [
                 'ip' => $ip,
                 'port' => $port,
                 'namespaceId' => $namespaceId,
                 'serviceName' => $serviceName,
-                'weight' => $weight,
-                'enabled' => $enabled,
-                'healthy' => $healthy,
-                'metadata' => $metadata,
-                'clusterName' => $clusterName,
-                'groupName' => $groupName,
-                'ephemeral' => $ephemeral,
-            ]),
+            ])),
         ]);
     }
 
-    public function beat(string $serviceName, string $groupName, bool $ephemeral, string $namespaceId): ResponseInterface
+
+    public function beat(string $serviceName, string $groupName, bool $ephemeral, array $beat): ResponseInterface
     {
         return $this->request('PUT', '/nacos/v1/ns/instance/beat', [
             RequestOptions::QUERY => $this->filter([
                 'serviceName' => $serviceName,
                 'groupName' => $groupName,
                 'ephemeral' => $ephemeral,
-                'beat' => json_encode([
-                    'serviceName' => $serviceName,
-                    'groupName' => $groupName,
-                    'ephemeral' => $ephemeral,
-                    'namespaceId' => $namespaceId,
-                ], JSON_UNESCAPED_UNICODE),
+                'beat' => $beat,
             ]),
         ]);
     }
