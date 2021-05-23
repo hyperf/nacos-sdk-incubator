@@ -40,9 +40,9 @@ class OperatorProvider extends AbstractProvider
 
     public function getServers(?bool $healthy = null): ResponseInterface
     {
-        return$this->request('GET', '/nacos/v1/ns/operator/servers', [
+        return $this->request('GET', '/nacos/v1/ns/operator/servers', [
             RequestOptions::QUERY => $this->filter([
-                'healthy'=> $healthy
+                'healthy' => $healthy,
             ]),
         ]);
     }
