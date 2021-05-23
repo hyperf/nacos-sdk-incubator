@@ -13,21 +13,18 @@ namespace Hyperf\NacosSdk\Provider;
 
 use GuzzleHttp\RequestOptions;
 use Hyperf\NacosSdk\AbstractProvider;
-use Hyperf\NacosSdk\Exception\RequestException;
-use Hyperf\NacosSdk\Model\ServiceModel;
-use Hyperf\Utils\Str;
 use Psr\Http\Message\ResponseInterface;
 
 class ServiceProvider extends AbstractProvider
 {
     /**
      * @param array $optional = [
-     *      'groupName' => '',
-     *      'namespaceId' => '',
-     *      'protectThreshold' => 0.99,
-     *      'metadata' => '',
-     *      'selector' => '', // json字符串
-     * ]
+     *                        'groupName' => '',
+     *                        'namespaceId' => '',
+     *                        'protectThreshold' => 0.99,
+     *                        'metadata' => '',
+     *                        'selector' => '', // json字符串
+     *                        ]
      */
     public function create(string $serviceName, array $optional = []): ResponseInterface
     {
@@ -51,12 +48,12 @@ class ServiceProvider extends AbstractProvider
 
     /**
      * @param array $optional = [
-     *      'groupName' => '',
-     *      'namespaceId' => '',
-     *      'protectThreshold' => 0.99,
-     *      'metadata' => '',
-     *      'selector' => '', // json字符串
-     * ]
+     *                        'groupName' => '',
+     *                        'namespaceId' => '',
+     *                        'protectThreshold' => 0.99,
+     *                        'metadata' => '',
+     *                        'selector' => '', // json字符串
+     *                        ]
      */
     public function update(string $serviceName, array $optional = []): ResponseInterface
     {
@@ -66,7 +63,6 @@ class ServiceProvider extends AbstractProvider
             ])),
         ]);
     }
-
 
     public function detail(string $serviceName, ?string $groupName = null, ?string $namespaceId = null): ResponseInterface
     {
@@ -86,7 +82,7 @@ class ServiceProvider extends AbstractProvider
                 'pageNo' => $pageNo,
                 'pageSize' => $pageSize,
                 'groupName' => $groupName,
-                'namespaceId' => $namespaceId
+                'namespaceId' => $namespaceId,
             ]),
         ]);
     }
