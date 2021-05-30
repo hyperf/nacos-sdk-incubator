@@ -12,7 +12,10 @@ declare(strict_types=1);
 namespace HyperfTest\NacosSdk\Cases\Provider;
 
 use Hyperf\NacosSdk\Application;
+use Hyperf\NacosSdk\Config;
+use Hyperf\Utils\Codec\Json;
 use HyperfTest\NacosSdk\AbstractTestCase;
+use HyperfTest\NacosSdk\HandlerMockery;
 
 /**
  * @internal
@@ -22,8 +25,18 @@ class NacosAuthTest extends AbstractTestCase
 {
     public function testLogin()
     {
-        $application = new Application($this->getContainer());
+        $application = new Application(new Config([
+            'username' => 'nacos',
+            'password' => 'nacos',
+            'guzzle_config' => [
+                'handler' => new HandlerMockery(),
+                'headers' => [
+                    'charset' => 'UTF-8',
+                ],
+            ],
+        ]));
         $result = $application->auth->login('nacos', 'nacos');
+        $result = Json::decode((string) $result->getBody());
         $this->assertSame($result['accessToken'], $application->auth->getAccessToken());
         $this->assertSame($result['tokenTtl'], 18000);
         $this->assertSame($result['globalAdmin'], true);

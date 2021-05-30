@@ -98,13 +98,13 @@ class InstanceProvider extends AbstractProvider
     }
 
     /**
-     * @param array $optional = [
-     *                        'groupName' => '',
-     *                        'namespaceId' => '',
-     *                        'cluster' => '',
-     *                        'healthyOnly' => false,
-     *                        'ephemeral' => false,
-     *                        ]
+     * @param $optional = [
+     *     'groupName' => '',
+     *     'namespaceId' => '',
+     *     'cluster' => '',
+     *     'healthyOnly' => false,
+     *     'ephemeral' => false,
+     * ]
      */
     public function detail(string $ip, int $port, string $serviceName, array $optional = []): ResponseInterface
     {
@@ -130,11 +130,11 @@ class InstanceProvider extends AbstractProvider
     }
 
     /**
-     * @param array $optional = [
-     *                        'namespaceId' => '',
-     *                        'groupName' => '',
-     *                        'clusterName' => '',
-     *                        ]
+     * @param $optional = [
+     *     'namespaceId' => '',
+     *     'groupName' => '',
+     *     'clusterName' => '',
+     * ]
      */
     public function updateHealth(string $ip, int $port, string $serviceName, bool $healthy, array $optional = []): ResponseInterface
     {

@@ -12,8 +12,10 @@ declare(strict_types=1);
 namespace HyperfTest\NacosSdk\Cases\Provider;
 
 use Hyperf\NacosSdk\Application;
-use Hyperf\NacosSdk\Model\ConfigModel;
+use Hyperf\NacosSdk\Config;
+use Hyperf\Utils\Codec\Json;
 use HyperfTest\NacosSdk\AbstractTestCase;
+use HyperfTest\NacosSdk\HandlerMockery;
 
 /**
  * @internal
@@ -23,11 +25,15 @@ class NacosConfigTest extends AbstractTestCase
 {
     public function testGet()
     {
-        $application = new Application($this->getContainer());
-        $configModel = new ConfigModel();
-        $configModel->setDataId('hyperf-service-config');
-        $configModel->setGroup('DEFAULT_GROUP');
-        $result = $application->config->get($configModel);
-        $this->assertSame(['A' => 'A'], $result);
+        $application = new Application(new Config([
+            'guzzle_config' => [
+                'handler' => new HandlerMockery(),
+                'headers' => [
+                    'charset' => 'UTF-8',
+                ],
+            ],
+        ]));
+        $result = $application->config->get('hyperf-service-config', 'DEFAULT_GROUP');
+        $this->assertSame(['A' => 'A'], Json::decode((string) $result->getBody()));
     }
 }

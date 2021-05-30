@@ -32,7 +32,9 @@ class Config
      * @var array
      */
     protected $guzzleConfig = [
-        'headers' => 'UTF-8',
+        'headers' => [
+            'charset' => 'UTF-8',
+        ],
     ];
 
     /**
