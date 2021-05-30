@@ -90,10 +90,6 @@ class InstanceProvider extends AbstractProvider
      */
     public function list(string $serviceName, array $optional = []): ResponseInterface
     {
-        if (! empty($clusters)) {
-            $clusters = implode(',', $clusters);
-        }
-
         return $this->request('GET', '/nacos/v1/ns/instance/list', [
             RequestOptions::QUERY => $this->filter(array_merge($optional, [
                 'serviceName' => $serviceName,
