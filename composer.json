@@ -61,6 +61,9 @@
         "cs-fix": "php-cs-fixer fix $1"
     },
     "extra": {
+        "branch-alias": {
+            "dev-main": "2.2-dev"
+        },
         "hyperf": {
             "config": "Hyperf\\NacosSdk\\ConfigProvider"
         }
