@@ -29,6 +29,8 @@ class HandlerMockery
             '/nacos/v1/ns/operator/metrics' => '/json/get_metrics.json',
             '/nacos/v1/ns/operator/servers' => '/json/get_servers.json',
             '/nacos/v1/ns/raft/leader' => '/json/get_leader.json',
+            '/nacos/v1/ns/service' => '/json/service_detail.json',
+            '/nacos/v1/ns/service/list' => '/json/service_list.json',
         ];
 
         return new FulfilledPromise(new Psr7\Response(

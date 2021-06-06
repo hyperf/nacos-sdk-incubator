@@ -47,13 +47,13 @@ class ServiceProvider extends AbstractProvider
     }
 
     /**
-     * @param array $optional = [
-     *                        'groupName' => '',
-     *                        'namespaceId' => '',
-     *                        'protectThreshold' => 0.99,
-     *                        'metadata' => '',
-     *                        'selector' => '', // json字符串
-     *                        ]
+     * @param $optional = [
+     *     'groupName' => '',
+     *     'namespaceId' => '',
+     *     'protectThreshold' => 0.99,
+     *     'metadata' => '',
+     *     'selector' => '', // json字符串
+     * ]
      */
     public function update(string $serviceName, array $optional = []): ResponseInterface
     {
