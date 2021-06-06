@@ -20,37 +20,21 @@ class HandlerMockery
     public function __invoke(RequestInterface $request, array $options)
     {
         $uri = $request->getUri()->getPath();
-        switch ($uri) {
-            case '/nacos/v1/auth/users/login':
-                $response = new Psr7\Response(
-                    200,
-                    [],
-                    file_get_contents(__DIR__ . '/json/login.json')
-                );
-                break;
-            case '/nacos/v1/cs/configs':
-                $response = new Psr7\Response(
-                    200,
-                    [],
-                    file_get_contents(__DIR__ . '/json/get_config.json')
-                );
-                break;
-            case '/nacos/v1/ns/instance/list':
-                $response = new Psr7\Response(
-                    200,
-                    [],
-                    file_get_contents(__DIR__ . '/json/instance_list.json')
-                );
-                break;
-            case '/nacos/v1/ns/instance':
-                $response = new Psr7\Response(
-                    200,
-                    [],
-                    file_get_contents(__DIR__ . '/json/instance_detail.json')
-                );
-                break;
-        }
+        $mapping = [
+            '/nacos/v1/auth/users/login' => '/json/login.json',
+            '/nacos/v1/cs/configs' => '/json/get_config.json',
+            '/nacos/v1/ns/instance/list' => '/json/instance_list.json',
+            '/nacos/v1/ns/instance' => '/json/instance_detail.json',
+            '/nacos/v1/ns/operator/switches' => '/json/get_switches.json',
+            '/nacos/v1/ns/operator/metrics' => '/json/get_metrics.json',
+            '/nacos/v1/ns/operator/servers' => '/json/get_servers.json',
+            '/nacos/v1/ns/raft/leader' => '/json/get_leader.json',
+        ];
 
-        return new FulfilledPromise($response);
+        return new FulfilledPromise(new Psr7\Response(
+            200,
+            [],
+            file_get_contents(__DIR__ . $mapping[$uri])
+        ));
     }
 }
