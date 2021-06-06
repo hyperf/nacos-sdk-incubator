@@ -35,6 +35,20 @@ class HandlerMockery
                     file_get_contents(__DIR__ . '/json/get_config.json')
                 );
                 break;
+            case '/nacos/v1/ns/instance/list':
+                $response = new Psr7\Response(
+                    200,
+                    [],
+                    file_get_contents(__DIR__ . '/json/instance_list.json')
+                );
+                break;
+            case '/nacos/v1/ns/instance':
+                $response = new Psr7\Response(
+                    200,
+                    [],
+                    file_get_contents(__DIR__ . '/json/instance_detail.json')
+                );
+                break;
         }
 
         return new FulfilledPromise($response);
